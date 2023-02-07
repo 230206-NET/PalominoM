@@ -5,21 +5,30 @@ namespace HotOrCold {
     public class HOC {
         public static void Main(string[] args)
         {
-            var ran = new Random();
+            var ran = new Random(21);
             int target = ran.Next(21);
+            Console.WriteLine("Target" + target);
+            Console.WriteLine("GUESS:");
             string input = Console.ReadLine();
             int num = int.Parse(input);
-            if (num == target) {
-                Console.WriteLine("YAY");
+            
+            while (num != target) {
+                
+                input = Console.ReadLine();
+                num = int.Parse(input);
+                
+                if (num > target)
+                {
+                    Console.WriteLine("Too High. Guess Again:");
+                }
+                else
+                {
+                    Console.WriteLine("Too Low. Guess Again:");
+                }
             }
-            else if (num > target)
-            {
-                Console.WriteLine("Too High");
-            }
-            else
-            {
-                Console.WriteLine("Too Low");
-            }
+            Console.WriteLine("YAY! You did it :)");
+            
+            
         }
     }
     

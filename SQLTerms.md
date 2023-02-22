@@ -6,7 +6,7 @@ A relational database is a collection of data items with pre-defined relationshi
    Data Definition Language, DDL commands are used to change and modify the structure of the table.
 #DML
   Data Manipulation Language. DML commands are used to manage and modify the database.
-#DQL
+##DQL
   Data Query Language. DQL is used to fetch data from the database.
 #DCL
   Data Control Language. DCL commands mainly deals with rights, permissions, and other controls of the database. 

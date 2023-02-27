@@ -1,0 +1,51 @@
+using System; 
+using Models; 
+using DataAccess;
+
+namespace Services;
+
+public class AcctService {
+    private readonly IRepository _repo;      //private of repo interface
+
+    //Implementationof dependecy injection. Needs Irepo to initialize class
+    public AcctService(IRepository repo){
+        _repo = repo; 
+    }
+
+    public List<Account> GetAllAccounts(){
+        return _repo.GetAllAccounts();
+    }
+    
+    /*This method checks if account exists in order to login user
+        This could potentially be replaced with query later on
+    */
+    public Account? loginUser(string? sid, string? pwd){
+        //check if account is in db
+        Account acct = new();
+        if(Int32.TryParse(sid, out int id)){
+          return acct = _repo.checkExistingAccount(id,pwd);
+        }
+        return null;
+    }
+
+    public bool newAccount(Account newAccount){
+       // Account acct = new();
+        //acct = _repo.checkExistingAccount(newAccount.workId,newAccount.password);
+        if(_repo.checkExistingAccount(newAccount.workId,newAccount.password).workerType == 0){
+            _repo.createNewAccount(newAccount);
+            return true;
+        }
+       return false;
+    } 
+
+    public Account editProfile(Account accountToEdit){
+        return accountToEdit;
+    }
+
+    public void employeeRevision(){
+        throw new NotSupportedException();
+    }
+
+}
+
+

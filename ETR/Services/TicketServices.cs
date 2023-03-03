@@ -41,17 +41,12 @@ public class TicketServices {
         - Calls dbrepo to submit ticket to db. 
         - checks info before sending to db 
     */
-    public bool submitTicket(decimal amt, int eid, string? sdescription){
-        Ticket ticket = new Ticket{
-            amount = amt,
-            submittedBy = eid, 
-            description = sdescription,
-            status = 'P'
-        };
+    public Ticket submitTicket(Ticket ticket){
+        ticket.status = 'P';
         return _repo.SubmitTicket(ticket);
     }
 
-    public void ticketRevision(Ticket t){
-        _repo.updateTickets(t);
+    public Ticket ticketRevision(Ticket t){
+        return _repo.updateTickets(t);
     }
 }

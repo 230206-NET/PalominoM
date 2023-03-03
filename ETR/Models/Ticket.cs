@@ -3,6 +3,14 @@ using System;
 namespace Models; 
 
 public class Ticket{
+
+    public Ticket(){}
+    public Ticket(int sb, decimal amt, string description){
+        this.description = description;
+        this.amount = amt; 
+        this.submittedBy = sb;
+    }
+
     public string? type {get; set; } //change back to non-nullable later
     public string? description {get; set; } //change back to non-nullable later
     public decimal amount {get; set; }

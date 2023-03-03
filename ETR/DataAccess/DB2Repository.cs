@@ -45,17 +45,28 @@ public class DB2Repository : IRepository{
             using SqlDataReader reader = cmd.ExecuteReader();
 
             Account acct = new();
-
+            string first = " ", last = " ";
             while(reader.Read()){
+                
                 int accountID = (int) reader["EID"];
                 string pwd = (string) reader ["EPassword"];
                 string stype = (string) reader ["WorkerType"];
+                
+                if(reader ["First_Name"] != DBNull.Value){
+                    first = (string) reader ["First_Name"];
+                }
+                if(reader ["Last_Name"]!= DBNull.Value){
+                    last = (string) reader ["Last_Name"];
+                }
+                
                 char type = stype[0];
                 if(accounts.Count == 0 || accountID != accounts.Last().workId){
                     acct = new Account {
                     workId = accountID,
                     password = pwd,
                     workerType = type,
+                    firstName = first,
+                    lastName = last
                     };
                     accounts.Add(acct);
                 }
@@ -80,11 +91,13 @@ public class DB2Repository : IRepository{
             connection.Open();   //open connection
             //run insert query 
             //NO SEMICOLON ON QUERY STRING!!!!!!!!
-            string query =  "INSERT INTO USERS(EID, WorkerType, EPassword) VALUES (@id, @wType, @pwd)";
+            string query =  "INSERT INTO USERS(EID, WorkerType, EPassword, First_Name, Last_Name) VALUES (@id, @wType, @pwd, @first, @last)";
             using SqlCommand cmd = new SqlCommand(query,connection);
             cmd.Parameters.AddWithValue("@id",accountToCreate.workId);
             cmd.Parameters.AddWithValue("@wType",accountToCreate.workerType);
             cmd.Parameters.AddWithValue("@pwd",accountToCreate.password);
+            cmd.Parameters.AddWithValue("@first",accountToCreate.firstName);
+            cmd.Parameters.AddWithValue("@last",accountToCreate.lastName);
 
             cmd.ExecuteNonQuery();
             connection.Close();
@@ -155,13 +168,23 @@ public class DB2Repository : IRepository{
 
         using SqlDataReader reader = cmd.ExecuteReader();
 
+        int mid =  0; 
+
         while(reader.Read()){
+                string s = (string) reader["SStatus"];
+                 if(reader ["ManagerID"] != DBNull.Value){
+                    mid = (int) reader ["ManagerID"];
+                 }
                 ticketList.Add(new Ticket {
                     idTicket = (int) reader["ID"],
                     amount = (decimal) reader["Amount"],
-                    description = (string) reader["TDescription"]
+                    description = (string) reader["TDescription"],
+                    status = s[0],
+                    approveBy = mid,
+                    date = (DateTime) reader["SubmissionDate"]
                 });
         }
+
         con.Close();  //just bc I am paranoid 
         return ticketList; 
     }
@@ -170,7 +193,7 @@ public class DB2Repository : IRepository{
     /// <summary>
     /// Persists a new ticket to storage (Adds ticket to database)
     /// </summary>
-    public bool SubmitTicket(Ticket ticketToSubmit)
+    public Ticket SubmitTicket(Ticket ticketToSubmit)
     {
         try{
             using SqlConnection conn = new SqlConnection(_connectionString);
@@ -185,7 +208,7 @@ public class DB2Repository : IRepository{
             cmd.ExecuteNonQuery();
             conn.Close();
 
-            return true;
+            return ticketToSubmit;
 
         } catch(SqlException ex){
             Log.Warning("Caught SQL Exception trying to add ticket {0}", ex);
@@ -214,6 +237,8 @@ public class DB2Repository : IRepository{
                         idTicket = (int) reader["ID"],
                         amount = (decimal) reader["Amount"],
                         description = (string) reader["TDescription"],
+                        date = (DateTime) reader["SubmissionDate"],
+                        submittedBy = (int) reader["SubmitedBy"],
                         status = s[0]
                     });
             }
@@ -230,27 +255,61 @@ public class DB2Repository : IRepository{
     /// Updates ticket information  
     /// </summary>
     /// <returns> bool if succesfull update or not</returns>
-    public bool updateTickets(Ticket updatedTicket){
+    public Ticket updateTickets(Ticket updatedTicket){
 
-        try{
+         try{
             using SqlConnection conn = new SqlConnection(_connectionString);
             conn.Open();
-            string query = "UPDATE TICKETS SET SStatus = @stat WHERE ID = @id";
+           string query = "UPDATE TICKETS SET SStatus = @stat, ManagerID = @mID WHERE ID = @id";
             using SqlCommand cmd = new SqlCommand(query,conn);
 
             cmd.Parameters.AddWithValue("@stat", updatedTicket.status);
             cmd.Parameters.AddWithValue("@id", updatedTicket.idTicket);
+            cmd.Parameters.AddWithValue("@mID", updatedTicket.approveBy);
 
             cmd.ExecuteNonQuery();
             conn.Close();
 
             conn.Close();  //just bc I am paranoid 
-            return true; 
+            return updatedTicket; 
 
         }catch(SqlException ex){
             Log.Warning("Caught SQL Exception trying to update ticket{0}",ex);
             throw ex; 
         }
     
+    }
+
+    public Account updateAccount(Account updatedAccount){
+        try{
+            using SqlConnection conn = new SqlConnection(_connectionString);
+            conn.Open();
+            string first = "unknown", last = "unknown";
+            if(updatedAccount.firstName != null){
+                first = updatedAccount.firstName;
+            }
+
+            if(updatedAccount.lastName != null){
+                last = updatedAccount.lastName;
+            }
+            string query = "UPDATE USERS SET First_Name = @first, Last_Name = @last, WorkerType = @wtype, EPassword = @pwd WHERE EID = @id";
+            using SqlCommand cmd = new SqlCommand(query,conn);
+
+            cmd.Parameters.AddWithValue("@first", first);
+            cmd.Parameters.AddWithValue("@last", last);
+            cmd.Parameters.AddWithValue("@id", updatedAccount.workId);
+            cmd.Parameters.AddWithValue("@wtype", updatedAccount.workerType);
+            cmd.Parameters.AddWithValue("@pwd", updatedAccount.password);
+
+            cmd.ExecuteNonQuery();
+            conn.Close();
+
+            conn.Close();  //just bc I am paranoid 
+            return updatedAccount; 
+
+        }catch(SqlException ex){
+            Log.Warning("Caught SQL Exception trying to update ticket{0}",ex);
+            throw ex; 
+        }
     }
 }

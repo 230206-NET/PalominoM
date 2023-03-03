@@ -42,8 +42,19 @@ public class AccountServices {
         return accountToEdit;
     }
 
-    public void employeeRevision(){
-        throw new NotSupportedException();
+    public Account employeeRevision(int id, char type){
+        List<Account> acctList = _repo.GetAllAccounts();
+        Account acct = new();
+        foreach(Account a in acctList){
+            if(a.workId == id){
+                acct.workId = a.workId;
+                acct.lastName = a.lastName;
+                acct.firstName = a.firstName;
+                acct.password = a.password;
+            }
+        }
+        acct.workerType = type;
+        return _repo.updateAccount(acct);
     }
 
 }

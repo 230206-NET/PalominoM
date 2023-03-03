@@ -221,12 +221,12 @@ var assemblies = [
   {
     "name": "DataAccess",
     "classes": [
-      { "name": "DataAccess.DB2Repository", "rp": "DataAccess_DB2Repository.html", "cl": 0, "ucl": 146, "cal": 146, "tl": 257, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "DataAccess.DB2Repository", "rp": "DataAccess_DB2Repository.html", "cl": 0, "ucl": 193, "cal": 193, "tl": 315, "cb": 0, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "ETRAPI",
     "classes": [
-      { "name": "Program", "rp": "ETRAPI_Program.html", "cl": 0, "ucl": 70, "cal": 70, "tl": 114, "cb": 0, "tb": 18, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Program", "rp": "ETRAPI_Program.html", "cl": 0, "ucl": 71, "cal": 71, "tl": 115, "cb": 0, "tb": 18, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "Models",
@@ -237,7 +237,7 @@ var assemblies = [
   {
     "name": "Services",
     "classes": [
-      { "name": "Services.AccountServices", "rp": "Services_AccountServices.html", "cl": 0, "ucl": 23, "cal": 23, "tl": 49, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Services.AccountServices", "rp": "Services_AccountServices.html", "cl": 0, "ucl": 35, "cal": 35, "tl": 60, "cb": 0, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Services.TicketServices", "rp": "Services_TicketServices.html", "cl": 0, "ucl": 22, "cal": 22, "tl": 52, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
 ];

@@ -21,7 +21,7 @@ public interface IRepository{
     /// <returns>a list of ticket submissions</returns>
     List<Ticket> GetAllTickets();
 
-    bool updateTickets(Ticket updatedTicket);
+    Ticket updateTickets(Ticket updatedTicket);
 
     /// <summary>
     /// Retrieves all accounts
@@ -32,9 +32,11 @@ public interface IRepository{
     /// <summary>
     /// Persists a new ticket to storage
     /// </summary>
-    bool SubmitTicket(Ticket ticketToSubmit);
+    Ticket SubmitTicket(Ticket ticketToSubmit);
 
     void createNewAccount(Account accountToCreate);
 
     Account checkExistingAccount(int id, string? pwd);
+
+    Account updateAccount(Account updatedAccount);
 }

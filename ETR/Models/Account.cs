@@ -20,9 +20,9 @@ public class Account{   //make to abstract, meaning I need to make abstract gett
     //constructor 
     public Account(){}
 
-    public Account(string password, int workId){
+    public Account(int workID, string password){
         this.password = password;
-        this.workId = workId;
+        this.workId = workID;
     }
 
     //change this to recursive to send back string until list is empty 
